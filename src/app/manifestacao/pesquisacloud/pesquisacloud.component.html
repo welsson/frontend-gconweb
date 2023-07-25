@@ -1,0 +1,70 @@
+<ngx-ui-loader text="Inicializando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img
+    width="220"
+    alt="GCON"
+    height="80"
+    src="assets/image/logo_gcon2.jpg"
+  />
+  <span>Plataforma de Gestão e Conhecimento</span>
+    <div class="spacer"></div>
+    <img
+    width="220"
+    height="80"
+    [src]="imagemLogo"
+  />
+</div>
+<br><br>
+<div class="content" role="main">
+  <div [hidden]="backendForaAr">
+    <b><h3>O site está em manutenção, aguarde alguns minutos.</h3></b>
+</div>
+  <div [hidden]="backendNoAr">
+  <div class="linha">
+    <p-divider></p-divider>
+    <div><h3>O que você quer Fazer?</h3></div>
+    <p-divider></p-divider>
+  </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-md-6 p-lg-6">
+          <a (click)="denuncia()">
+          <p-card header="Denúncia" [style]="{'margin-bottom': '2em', 'background-color':'DarkRed', 'color': 'white'}">
+            <p>Comunique uma irregularidade ou ato ilícito no âmbito da Instituição</p>
+          </p-card>
+          </a>
+          </div>
+        <div class="p-col-12 p-md-6 p-lg-6">
+          <a (click)="elogio()">
+          <p-card header="Elogio" [style]="{'margin-bottom': '2em', 'background-color':'MediumVioletRed', 'color': 'white'}">
+            <p>Expresse que você está satisfeito com o atendimento ou serviço da Instituição</p>
+          </p-card>
+          </a>
+        </div>
+        <div class="p-col-12 p-md-6 p-lg-6">
+          <a (click)="reclamacao()">
+          <p-card header="Reclamação" [style]="{'margin-bottom': '2em', 'background-color':'Sienna', 'color': 'white'}">
+            <p>Manifeste sua insatisfação com o atendimento ou serviço prestado da Instiuição</p>
+          </p-card>
+          </a>
+          </div>
+        <div class="p-col-12 p-md-6 p-lg-6">
+          <a (click)="sugestao()">
+          <p-card header="Sugestão" [style]="{'margin-bottom': '2em', 'background-color':'DeepSkyBlue', 'color': 'white'}">
+            <p>Envie uma idéia ou proposta de melhoria dos serviços prestado da Instituição</p>
+          </p-card>
+          </a>
+        </div>
+    
+    </div>
+    <p-button label="Consulte sua Manifestação" (click)="consulta()" iconPos="right"></p-button>  &nbsp;&nbsp;&nbsp;
+      <p-button label="Perguntas Frequentes" (click)="perguntaFrequente()" iconPos="right">
+    </p-button>
+
+
+
+  </div>
+
+
+

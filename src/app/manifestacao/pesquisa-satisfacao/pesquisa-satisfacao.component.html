@@ -1,0 +1,50 @@
+
+<ngx-ui-loader text="Processando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img width="220" alt="GCON"
+  height="80"
+  src="assets/image/logo_gcon2.jpg">
+  <span>Plataforma de Gestão e Conhecimento</span>
+  <div class="spacer"></div>
+  <img width="220"   height="80" [src]="imagemLogo" />
+</div>
+<br><br>
+<div class="content" role="main">
+  <p-toast position="top-center" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+      <div class="p-flex p-flex-column" style="flex: 1">
+        <div class="p-text-center">
+          <p>{{message.detail}}</p> 
+        </div>
+      </div>
+    </ng-template>
+  </p-toast>
+    <div class="linha">
+      <p-divider></p-divider>
+      <div>Pesquisa de Satisfação</div>
+      <p-divider></p-divider>
+    </div>
+    <div class="p-fluid p-formgrid p-grid" [hidden]="divPesquisaFeita">
+        <div class="divResultado">
+          <form #fp="ngForm" autocomplete="off">
+            <ng-template ngFor let-item [ngForOf]="resumoAtendimento.listaPergunta">
+              <div>{{item.descricao}}</div>
+              <div class="p-formgroup-inline">
+                <div class="p-col-12 p-lg-12">
+                  <ng-template ngFor let-resp [ngForOf]="item.listaRespostaSatisfacao">
+                    <p-radioButton [name]="item.id" [value]="resp.id" [label]="resp.descricao" required
+                      [id]="'radio'+item.id" [(ngModel)]="item.idResposta" #item.id="ngModel"></p-radioButton>
+                  </ng-template>
+
+                </div>
+              </div>
+              <p-divider></p-divider>
+            </ng-template>
+            <button pButton type="button" label="Responder Pesquisa" (click)="enviarPesquisa(fp)" [disabled]="(!fp.valid)"></button>
+          </form>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid" [hidden]="!divPesquisaFeita">
+        <div><span><b>A pesquisa de satisfação foi realizada</b></span></div>
+      </div>

@@ -1,0 +1,363 @@
+<ngx-ui-loader text="Processando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img width="220"  height="80" alt="Angular Logo"
+  src="assets/image/2_12_logo.png" />
+  <span>Plataforma de Gestão e Conhecimento</span>
+  <div class="spacer"></div>
+  <img
+  width="220"  height="80"
+  [src]="imagemLogo"/>
+</div>
+<br><br>
+<div class="content" role="main">
+  <p-toast position="top-center" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+      <div class="p-flex p-flex-column" style="flex: 1">
+        <div class="p-text-center">
+          <p>{{message.detail}}</p>
+        </div>
+      </div>
+    </ng-template>
+  </p-toast>
+  <form #f="ngForm" disa autocomplete="off" (ngSubmit)="concluir(f)">
+    <div class="linha">
+      <p-divider></p-divider>
+      <div>{{tipoManifestacao}}</div>
+      <p-divider></p-divider>
+    </div>
+    <p-tabView styleClass="tabview-custom" [activeIndex]="index" (onChange)="index">
+      <p-tabPanel [disabled]="abaDisabled0">
+        <ng-template pTemplate="header">
+          <span>Dados da Manifestação</span>
+        </ng-template>
+        <div class="linha2">
+          Os campos sinalizados com asteriscos (*) são de preenchimento obrigatório
+        </div>
+        <div class="p-fluid p-formgrid p-grid">
+
+      <div class="p-col-12 p-lg-12">
+        <div class="p-formgroup-inline">
+            <div class="p-field-checkbox">
+              <p-radioButton name="identificado" value="0" (click)="anonimo()" [(ngModel)]="atendimento.identificado"  inputId="identificado"></p-radioButton>
+              <label title="Quando o manifestante não se identifica ou não fornece qualquer meio de contato">Anônimo</label>
+            </div>
+            <div class="p-field-checkbox">
+                <p-radioButton name="identificado1" value="1" (click)="identificado()" [(ngModel)]="atendimento.identificado"  inputId="identificado1"></p-radioButton>
+                <label title="Aquele manifestante que se identifica e aguarda contato com as providências e resposta">Identificado</label>
+            </div>
+        </div>
+      </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+
+        <div class="p-col-12 p-lg-6">
+            <label><b>Qual a unidade de missão? *</b></label>
+            <p-dropdown inputId="codigoUnidadeMissao" placeholder="Selecione a unidade de missão"  name="codigoUnidadeMissao" [options]="orgaos" [disabled]="desabilitarUnidade"
+            [(ngModel)]="atendimento.codigoUnidadeMissao" 
+              #codigoUnidadeMissao="ngModel" 
+           ></p-dropdown>
+          </div>
+
+          <div class="p-col-12 p-lg-6">
+            <p-checkbox [(ngModel)]="atendimento.sigilo" [binary]="true" name="binary" inputId="binary" #binary="ngModel"></p-checkbox>
+            <label title="Aquele manifestante que se identifica e solicita que sua identidade seja preservada nas tratativas"><b>Desejo manter o sigilo no atendimento</b></label>
+          </div>
+  
+        <div class="p-col-12 p-lg-12">
+            <label><b>Tipo Usuário *</b></label>
+            <p-dropdown inputId="tipoUsuario" placeholder="Selecione o tipo de usuário"  name="tipoUsuario" [options]="tipoUsuarios"
+            [(ngModel)]="atendimento.tipoUsuario"  (onChange)="campoTipoUsuario()"
+              #tipoUsuario="ngModel" name="tipoUsuario"
+           ></p-dropdown>
+          </div>
+
+          <div class="p-col-12 p-lg-12" [hidden]="habilitaCampoTipoUsuarioOutros">
+            <label><b>Por favor, especifique qual outro tipo de usuário *</b></label>
+            <input pInputText type="text" id="descricaoOutrosTipoUsuario"   name="descricaoOutrosTipoUsuario" [(ngModel)]="atendimento.descricaoOutrosTipoUsuario"
+              #descricaoOutrosTipoUsuario="ngModel" [required]="habilitaCampoTipoUsuarioOutros === false ? true : false">
+            <div style="color: red;" *ngIf="descricaoOutrosTipoUsuario.hasError('required') && descricaoOutrosTipoUsuario.touched">Informe a outra descrição do tipo usuário</div>
+          </div>          
+
+        <div class="p-col-12 p-lg-12">
+          <label><b>Tipo de denúncia: *</b></label>
+          <p-dropdown inputId="codigoTipoDenuncia" placeholder="Selecione o tipo de denúncia" name="codigoTipoDenuncia" [options]="tipoDenuncia"
+          [(ngModel)]="atendimento.codigoTipoDenuncia"  (onChange)="campoTipoDenuncia()"
+            #codigoTipoDenuncia="ngModel"
+         ></p-dropdown>
+        </div>
+
+        <div class="p-col-12 p-lg-12" [hidden]="habilitaCampoTipoDenunciaOutros">
+            <label><b>Por favor, especifique qual outra relação com o suspeito *</b></label>
+            <input pInputText type="text" id="descricaoOutrosTipoDenuncia"   name="descricaoOutrosTipoDenuncia" [(ngModel)]="atendimento.descricaoOutrosTipoDenuncia"
+              #descricaoOutrosTipoDenuncia="ngModel" [required]="habilitaCampoTipoDenunciaOutros === false ? true : false">
+            <div style="color: red;" *ngIf="descricaoOutrosTipoDenuncia.hasError('required') && descricaoOutrosTipoDenuncia.touched">Informe a outra descrição do tipo de denúncia</div>
+        </div>          
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>
+              O que você quer denunciar?</b><br> 
+              Descreva a situação que o levou a entrar em contato, quando ocorreu e quem são as pessoas envolvidas, se existem testemunhas e outros detalhes que julgar importantes. *</label>
+            <textarea pInputTextarea cols="50" name="descricaoOque" required id="descricaoOque" [(ngModel)]="atendimento.descricaoOque"
+            #descricaoOque="ngModel" rows="6"></textarea>
+            <div *ngIf="descricaoOque.invalid && descricaoOque.touched"
+            style="color: red;">Informe a descrição da manifestação</div>
+          </div>
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>
+                Você sabe se existem evidências sobre a situação? Em caso positivo, pedimos que as indique neste campo. </b><br> 
+                Caso seja possível, partilhe conosco quais são as evidências e em que lugar(es) podem ser encontradas as informações sobre a situação denunciada? Existem documentos e/ou materiais que comprovam essa situação? Em caso positivo, onde poderão ser encontradas as informações? Pedimos, ainda, que especifique da forma mais detalhada possível. Qualquer informação pode ser útil, por mais irrelevante que ela possa parecer.<br> 
+                ATENÇÃO: DE MODO ALGUM REMOVA OU TENHA CONTATO COM QUALQUER EVIDÊNCIA OU PROVA, POIS O PROCESSO DE APURAÇÃO PODE SER PREJUDICADO.</label>
+            <textarea pInputTextarea cols="50" name="evidencias" required id="evidencias" [(ngModel)]="atendimento.evidencias"
+            #evidencias="ngModel" rows="6"></textarea>
+          </div>          
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>Este relato está relacionado a algum registro anterior? Se sim, informe o protocolo neste campo. </b></label>
+            <input id="protocoloAnterior" type="text" name="protocoloAnterior" [(ngModel)]="atendimento.protocoloAnterior"
+            #protocoloAnterior="ngModel" pInputText>
+          </div>
+          </div>
+
+          <div class="p-fluid p-formgrid p-grid" [hidden]="campos">
+          <div class="p-col-12 p-lg-6">
+            <label><b>Nome *</b></label>
+            <input pInputText type="text" id="solicitante"   name="solicitante" [(ngModel)]="atendimento.nomeSolicitante"
+              #solicitante="ngModel" required minlength="5">
+              <div style="color: red;" *ngIf="solicitante.hasError('required') && solicitante.touched">Informe um nome</div>
+              <div *ngIf="solicitante.hasError('minlength') && solicitante.touched"
+              style="color: red;">O nome deve ser completo</div>
+              </div>
+              <div class="p-col-12 p-lg-6">
+                <label ><b>Email *</b></label>
+                <input id="email" type="email" required name="email" [(ngModel)]="atendimento.email" email
+                #email="ngModel" pInputText>
+                <div *ngIf="email.invalid && email.touched"
+                style="color: red;">Informe um e-mail válido</div>
+              </div>
+    
+          <div class="p-col-12 p-lg-6">
+            <label><b>DDD *</b></label>
+            <p-inputMask id="dddCelular" type="text" name="dddCelular" mask="(99)" [required]="true"
+            [(ngModel)]="atendimento.dddCelular" #dddCelular="ngModel"></p-inputMask>
+            <div style="color: red;" *ngIf="dddCelular.hasError('required') && dddCelular.touched">Informe o DDD</div>
+          </div>
+          <div class="p-col-12 p-lg-6">
+            <label><b>Celular *</b></label>
+            <p-inputMask id="foneCelular" type="text" name="foneCelular" mask="99999-9999" [required]="true"
+            [(ngModel)]="atendimento.foneCelular" #foneCelular="ngModel"></p-inputMask>
+            <div style="color: red;" *ngIf="foneCelular.hasError('required') && foneCelular.touched">Informe o celular</div>
+          </div>
+        </div>
+
+
+  <div class="p-fluid p-formgrid p-grid">
+
+
+
+
+
+          <div class="p-col-12 p-lg-6">
+            <br>
+        <div style="background-color: #DCDCDC;">
+            Declaro que estou ciente e concordo com os termos de privacidade. Aceito ser contatado pelo Grupo UBEC por telefone, e-mail, WhatsApp e SMS.<br/>
+          <a target="_blank" href="https://portalouvidoria.com.br:8516/assets/image/LGPD_UBEC.pdf">Termos de Privacidade - Grupo UBEC</a><br/>
+          <a target="_blank" href="https://portalouvidoria.com.br:8516/assets/image/Multiinovacoes_Codigo_Etica.pdf">Termos de Privacidade - GCON</a>
+        </div>
+        </div>
+        <div class="p-col-12 p-lg-6">
+            <label><b>Captcha de validação: *</b><span><b>&nbsp;&nbsp;{{atendimento.captcha}}</b></span></label>
+            <input type="text" name="captcha" id="captchaInformado" required [(ngModel)]="atendimento.captchaInformado"
+            #captchaInformado="ngModel" pInputText>
+            <div *ngIf="captchaInformado.invalid && captchaInformado.touched"
+            style="color: red;">Informe o captcha</div>
+          </div>
+        <div class="p-col-12 p-lg-6">
+            <p-checkbox [(ngModel)]="checkTermo" [binary]="true" name="binary" [required]="true" inputId="binary" #binary="ngModel"></p-checkbox>
+            <label><b>Li e concordo com os termos acima</b></label>
+          </div>
+        </div>
+        <br/>
+        <ng-template pTemplate="footer">
+          <div class="p-grid p-nogutter p-justify-end">
+            <p-button label="Voltar" (onClick)="voltarInicio()" icon="pi pi-angle-left" iconPos="left"></p-button>&nbsp;
+            <p-button label="Avançar" (onClick)="nextPage()" icon="pi pi-angle-right" iconPos="right" [disabled]="(!f.valid && !campos) || (campos && (descricaoOque.invalid==true || captchaInformado.invalid==true))"></p-button>
+          </div>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel [disabled]="abaDisabled1">
+        <ng-template pTemplate="header">
+          <span>Incluir Anexo</span>
+        </ng-template>
+       <div class="card">
+            <span><b><i>São permitidos os formatos de arquivos .pdf, .doc, .docx, .txt, .xls, .xlsx, .csv, mp3, .mp4, .mkv. limitados a 10M</i></b></span>
+            <p-fileUpload name="anexo" [auto]="true"
+            invalidFileSizeMessageDetail="O tamanho máximo permitido de arquivos é de 10 megas"
+             [customUpload]="true" chooseLabel="Selecione o arquivo"  (uploadHandler)="carregaArquivo($event)"
+            [multiple]="true" accept="image/*,application/*,image/.png,.jpg,.jpeg,.mp3,.mkv,.mp4" [maxFileSize]="11000000">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li  *ngFor="let file of uploadedFiles">{{file.name}}</li>
+                </ul>
+            </ng-template>
+          </p-fileUpload>
+        </div>
+
+        <br>
+        <ng-template pTemplate="footer">
+          <div class="p-grid p-nogutter p-justify-end">
+            <div class="p-grid p-nogutter p-justify-end">
+              <p-button label="Voltar" (onClick)="previewAnexo()" icon="pi pi-angle-left" iconPos="left"></p-button>
+            </div>&nbsp;
+            <div class="p-grid p-nogutter p-justify-end">
+              <p-button label="Avançar" (onClick)="nextPageAnexo()" icon="pi pi-angle-right" iconPos="right"></p-button>
+            </div>
+            </div>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel [disabled]="abaDisabled2">
+        <ng-template pTemplate="header">
+          <span>Revise os Dados</span>
+        </ng-template>
+
+        <div class="p-fluid p-formgrid p-grid">
+
+          <div class="p-field p-col-12">
+            <div class="p-formgroup-inline">
+                <div class="p-field-checkbox">
+                  <p-radioButton name="identificado3" value="0" [disabled]="true" [(ngModel)]="atendimento.identificado"  inputId="identificado3"></p-radioButton>
+                  <label>Anônimo</label>
+                </div>
+                <div class="p-field-checkbox">
+                    <p-radioButton name="identificado4" value="1" [disabled]="true" [(ngModel)]="atendimento.identificado"  inputId="identificado4"></p-radioButton>
+                    <label>Identificado</label>
+                </div>
+            </div>
+          </div>
+          </div>
+
+
+        <div class="p-fluid p-formgrid p-grid">
+
+            <div class="p-col-12 p-lg-6">
+                <label><b>Qual a unidade de missão? *</b></label>
+                <p-dropdown inputId="codigoUnidadeMissao2" placeholder="Selecione a unidade de missão" [disabled]="true"  name="codigoUnidadeMissao2" [options]="orgaos" 
+                [(ngModel)]="atendimento.codigoUnidadeMissao" 
+                  #codigoUnidadeMissao2="ngModel" 
+               ></p-dropdown>
+              </div>            
+
+            <div class="p-col-12 p-lg-6">
+                <label>Tipo Usuário <b>*</b></label>
+                <p-dropdown inputId="tipoUsuario2" placeholder="Selecione o tipo de usuário"  [disabled]="true" name="tipoUsuario2" [options]="tipoUsuarios"
+                [(ngModel)]="atendimento.tipoUsuario" 
+               ></p-dropdown>
+              </div>
+
+          <div class="p-col-12 p-lg-12">
+            <p-checkbox [(ngModel)]="atendimento.sigilo" [binary]="true" [disabled]="true" name="binary2" inputId="binary2" #binary2="ngModel"></p-checkbox>
+            <label>Desejo manter o sigilo no atendimento</label>
+          </div>
+
+          <div class="p-col-12 p-lg-6">
+            <label><b>Qual a relação do suspeito com a vítima: *</b></label>
+            <p-dropdown inputId="relacaoSuspeito2" placeholder="Selecione a sua relação com o suspeito" [disabled]="true" name="relacaoSuspeito2" [options]="relacao"
+            [(ngModel)]="atendimento.codigoRelacaoSuspeito"
+              #relacaoSuspeito2="ngModel"
+           ></p-dropdown>
+          </div>
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>
+              O que você quer denunciar?</b><br> 
+              Descreva a situação que o levou a entrar em contato, quando ocorreu e quem são as pessoas envolvidas, se existem testemunhas e outros detalhes que julgar importantes. *</label>
+            <textarea pInputTextarea cols="50" name="descricaoOque2" required id="descricaoOque2"[disabled]="true"  [(ngModel)]="atendimento.descricaoOque"
+            #descricaoOque2="ngModel" rows="6"></textarea>
+          </div>
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>
+                Você sabe se existem evidências sobre a situação? Em caso positivo, pedimos que as indique neste campo. </b><br> 
+                Caso seja possível, partilhe conosco quais são as evidências e em que lugar(es) podem ser encontradas as informações sobre a situação denunciada? Existem documentos e/ou materiais que comprovam essa situação? Em caso positivo, onde poderão ser encontradas as informações? Pedimos, ainda, que especifique da forma mais detalhada possível. Qualquer informação pode ser útil, por mais irrelevante que ela possa parecer.<br> 
+                ATENÇÃO: DE MODO ALGUM REMOVA OU TENHA CONTATO COM QUALQUER EVIDÊNCIA OU PROVA, POIS O PROCESSO DE APURAÇÃO PODE SER PREJUDICADO.</label>
+            <textarea pInputTextarea cols="50" name="evidencia2" required id="evidencia2" [disabled]="true" [(ngModel)]="atendimento.evidencias"
+            #evidencia2="ngModel" rows="6"></textarea>
+          </div>          
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>Este relato está relacionado a algum registro anterior? Se sim, informe o protocolo neste campo. </b></label>
+            <input id="protocoloAnterior2" type="text" name="protocoloAnterior2" [disabled]="true" [(ngModel)]="atendimento.protocoloAnterior"
+            #protocoloAnterior2="ngModel" pInputText>
+          </div>          
+
+          <div class="p-col-12 p-lg-6">
+            <label>Nome</label>
+            <input pInputText type="text" id="solicitante2" [disabled]="true" name="solicitante2" [(ngModel)]="atendimento.nomeSolicitante"
+              #solicitante2="ngModel" required minlength="5">
+          </div>
+          <div class="p-col-12 p-lg-6">
+            <label >Email</label>
+            <input id="email2" type="text" name="email2" [disabled]="true" [(ngModel)]="atendimento.email"
+            #email2="ngModel" pInputText>
+          </div>
+          <div class="p-col-12 p-lg-6">
+            <label>DDD</label>
+            <input id="dddCelular2" type="text" name="dddCelular2" [disabled]="true" [(ngModel)]="atendimento.dddCelular"
+            #dddCelular2="ngModel" pInputText>
+          </div>
+          <div class="p-col-12 p-lg-6">
+            <label>Celular</label>
+            <input id="foneCelular2" type="text" name="foneCelular2" [disabled]="true" [(ngModel)]="atendimento.foneCelular"
+            #foneCelular2="ngModel" pInputText>
+          </div>
+        </div>
+    
+
+        <div class="p-fluid p-formgrid p-grid">
+
+          <div class="p-col-12 p-lg-12">
+            <label><b>Anexo</b></label>
+          </div>
+          <div class="p-field p-col-12">
+            <ng-template ngFor let-item [ngForOf]="atendimento.listaAnexoDto" let-i="index">
+              <span><b>{{item.nomeArquivo}}</b></span>
+            </ng-template>
+          </div>
+
+        </div>
+
+        <ng-template pTemplate="footer">
+          <div class="p-grid p-nogutter p-justify-end">
+            <p-button label="Voltar" (onClick)="previewRevisao()" icon="pi pi-angle-left" iconPos="left"></p-button>
+            &nbsp;
+            <p-button label="Concluir" type="submit" icon="pi pi-angle-right" iconPos="right"></p-button>
+          </div>
+        </ng-template>
+      </p-tabPanel>
+      <p-tabPanel [disabled]="abaDisabled3">
+        <ng-template pTemplate="header">
+          <span>Protocolo</span>
+        </ng-template>
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="p-field p-col-12">
+            <label>Nome: <b>{{atendimento.nomeSolicitante}}</b></label>
+          </div>
+          <div class="p-field p-col-12">
+            <label>Número Protocolo: <b>{{atendimento.anoAtendimento}}{{atendimento.sequencialOrgao}}</b></label>
+          </div>
+          <div class="p-field p-col-12">
+            <label>Senha de acesso: <b>{{atendimento.senhaManifestante}}</b></label>
+          </div>
+        </div>
+        <ng-template pTemplate="footer">
+          <div class="p-grid p-nogutter p-justify-end">
+            <p-button label="Voltar ao Inicio" (onClick)="voltarInicio()" icon="pi pi-angle-right" iconPos="right">
+            </p-button>
+          </div>
+        </ng-template>
+      </p-tabPanel>
+
+    </p-tabView>
+  </form>
+</div>

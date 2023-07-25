@@ -1,0 +1,40 @@
+<ngx-ui-loader text="Processando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img width="100" alt="GCON"
+  height="40"
+  src="assets/image/logo_gcon2.jpg">
+  <span>Plataforma de Gestão e Conhecimento</span>
+  <div class="spacer"></div>
+  <img width="150"   height="40" [src]="imagemLogo" />
+
+</div>
+<p-toast position="top-center" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="p-flex p-flex-column" style="flex: 1">
+      <div class="p-text-center">
+        <p>{{message.detail}}</p>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+
+<div class="content" role="main">
+    <div class="linha">
+        <p-divider></p-divider>
+        <div><b>Ouvidoria - Perguntas Frequentes</b></div>
+        <p-divider></p-divider>
+      </div>
+<p-accordion [multiple]="true">
+    <span *ngFor="let pergunta of list">
+    <p-accordionTab>
+        <ng-template pTemplate="header">
+          {{pergunta.pergunta}}
+        </ng-template>
+        <div style="text-align: left;" [innerHTML]="pergunta.resposta"></div>
+    </p-accordionTab>
+    </span>
+</p-accordion>
+<br>
+<button pButton type="button" label="Voltar" (click)="voltarInicio()"></button>&nbsp;
+</div>

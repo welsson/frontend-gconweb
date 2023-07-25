@@ -1,0 +1,149 @@
+<ngx-ui-loader text="Processando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img width="220" alt="GCON"
+  height="80"
+  src="assets/image/2_12_logo.png">
+  <span>Plataforma de Gestão e Conhecimento</span>
+  <div class="spacer"></div>
+  <img width="220"   height="80" [src]="imagemLogo" />
+</div>
+<br><br>
+<p-toast position="top-center" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div class="p-flex p-flex-column" style="flex: 1">
+      <div class="p-text-center">
+        <p>{{message.detail}}</p>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+<div class="content" role="main" [hidden]="divConsulta">
+  <form #f="ngForm" autocomplete="off">
+    <div class="linha">
+      <p-divider></p-divider>
+      <div>Consultar Manifestação</div>
+      <p-divider></p-divider>
+    </div>
+    <div class="linha2">
+      Os campos sinalizados com asteriscos (*) são de preenchimento obrigatório
+    </div>
+    <div class="p-fluid p-formgrid p-grid">
+
+      <div class="p-field p-col-12">
+        <label>Número do protocolo <b>*</b></label>
+        <input pInputText type="text" id="numero" class="form-control" name="numero" [(ngModel)]="consulta.numero"
+          #numero="ngModel" required>
+        <div style="color: red;" *ngIf="numero.hasError('required') && numero.touched">Informe o número</div>
+      </div>
+      <div class="p-field p-col-12">
+        <label>Senha do protocolo <b>*</b></label>
+        <input pInputText type="text" id="senha" class="form-control" name="senha" [(ngModel)]="consulta.senha"
+          #senha="ngModel" required>
+        <div style="color: red;" *ngIf="senha.hasError('required') && senha.touched">Informe a senha</div>
+      </div>
+      <div class="p-field p-col-12">
+        <label>
+          * Se a manifestação for identificada o número do protocolo e a senha estão no email informado
+          </label>
+      </div>
+    </div>
+    <div class="p-grid p-nogutter p-justify-end">
+      <button pButton type="button" label="Voltar" (click)="voltarInicio()"></button>&nbsp;
+      <button pButton type="button" label="Consultar" (click)="consultaManifestacao()" [disabled]="(!f.valid)"></button>
+    </div>
+  </form>
+</div>
+
+<div class="content" role="main" [hidden]="divResumo">
+
+  <div class="linha">
+    <p-divider></p-divider>
+    <div>Consultar Manifestação</div>
+    <p-divider></p-divider>
+  </div>
+  <div class="linha">
+
+    <p-accordion expandIcon="pi pi-search-plus" collapseIcon="pi pi-minus-circle">
+
+
+      <p-accordionTab header="Dados da manifestação" [selected]="true">
+
+        <div class="divResultado">
+
+          <div>
+            <p>
+              <label><b>Nome do solicitante:&nbsp;&nbsp;</b></label>
+              <span>{{resumoAtendimento.nomeSolicitante}}</span>
+            </p>
+          </div>
+          <div>
+            <label><b>Data Entrada:&nbsp;&nbsp;</b></label>
+            <span>{{resumoAtendimento.dataCriacao}}</span>
+          </div>
+          <div>
+            <label><b>Descrição dos fatos: &nbsp;&nbsp;</b></label>
+            <span>{{resumoAtendimento.descricaoFatos}}</span>
+          </div>
+
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Respostas Parciais">
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="divResultado">
+            <ng-template ngFor let-item [ngForOf]="resumoAtendimento.listaResposta" let-i="index">
+              <div [innerHTML]="item.descricao"></div>
+              <p-divider></p-divider>
+            </ng-template>
+
+          </div>
+
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab header="Resposta e Histórico do Atendimento">
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="divResultado">
+              <div [innerHTML]="resumoAtendimento.respostaConclusao"></div>
+            </div>
+        </div>
+      </p-accordionTab>
+
+      <p-accordionTab header="Pesquisa de Satisfação" [hidden]="divPesquisa" [selected]="tabPesquisa">
+
+        <div class="p-fluid p-formgrid p-grid" [hidden]="divPesquisaFeita">
+          <div class="divResultado">
+            <form #fp="ngForm" autocomplete="off">
+              <ng-template ngFor let-item [ngForOf]="resumoAtendimento.listaPergunta">
+                <div>{{item.descricao}}</div>
+                <div class="p-formgroup-inline">
+                  <div class="p-col-12 p-lg-12">
+                    <ng-template ngFor let-resp [ngForOf]="item.listaRespostaSatisfacao">
+                      <p-radioButton [name]="item.id" [value]="resp.id" [label]="resp.descricao" required
+                        [id]="'radio'+item.id" [(ngModel)]="item.idResposta" #item.id="ngModel"></p-radioButton>
+                    </ng-template>
+
+                  </div>
+                </div>
+                <p-divider></p-divider>
+              </ng-template>
+              <button pButton type="button" label="Responder Pesquisa" (click)="enviarPesquisa(fp)" [disabled]="(!fp.valid)"></button>
+            </form>
+          </div>
+        </div>
+        <div class="p-fluid p-formgrid p-grid" [hidden]="!divPesquisaFeita">
+          <div><span><b>A pesquisa de satisfação foi realizada</b></span></div>
+        </div>
+      </p-accordionTab>
+      <br />
+      <div class="p-grid p-nogutter p-justify-end">
+        <button pButton type="button" label="Donwload" (click)="download()"></button>&nbsp;
+        <button pButton type="button" label="Interpor" (click)="interpor()"></button>&nbsp;
+        <button pButton type="button" label="Voltar" (click)="voltarConsulta()"></button>&nbsp;
+        <button pButton type="button" label="Responder Pesquisa" (click)="responderPesquisa()" [hidden]="!divPesquisa" [disabled]="(resumoAtendimento.manifestacaoConcluida=='Não' || resumoAtendimento.respondeuPesquisa==1)"></button>
+      </div>
+    </p-accordion>
+  </div>
+
+</div>

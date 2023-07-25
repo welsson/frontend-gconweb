@@ -1,0 +1,104 @@
+<ngx-ui-loader text="Inicializando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img
+    width="220"
+    alt="GCON"
+    height="80"
+    src="assets/image/2_12_logo.png"
+  />
+  <span>Plataforma de Gestão e Conhecimento</span>
+    <div class="spacer"></div>
+    <img
+    width="220"
+    height="80"
+    [src]="imagemLogo"
+  />
+</div>
+<br><br>
+
+<div class="content" role="main">
+
+  <div [hidden]="backendForaAr">
+    <b><h3>O site está em manutenção, aguarde alguns minutos.</h3></b>
+</div>
+
+  <div [hidden]="backendNoAr">
+  <div class="linha">
+    <p-divider></p-divider>
+    <div><h3>O que você quer Fazer?</h3></div>
+    <p-divider></p-divider>
+  </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-md-1 p-lg-6">
+          <a (click)="elogio()">
+          <p-card header="Elogio" [style]="{'margin-bottom': '2em', 'background-color':'#152CC7', 'color': 'white'}">
+            <p>Expresse que você está satisfeito com o atendimento ou serviço da Instituição</p>
+          </p-card>
+          </a>
+        </div>
+        <div class="p-col-12 p-md-1 p-lg-6">
+          <a (click)="reclamacao()">
+          <p-card header="Reclamação" [style]="{'margin-bottom': '2em', 'background-color':'Sienna', 'color': 'white'}">
+            <p>Manifeste sua insatisfação com o atendimento ou serviço prestado da Instiuição</p>
+          </p-card>
+          </a>
+          </div>
+          <div class="p-col-12 p-md-1 p-lg-6">
+            <a (click)="sugestao()">
+            <p-card header="Sugestão" [style]="{'margin-bottom': '2em', 'background-color':'DeepSkyBlue', 'color': 'white'}">
+              <p>Envie uma idéia de melhoria dos serviços prestado da Instituição</p>
+            </p-card>
+            </a>
+            </div>
+  
+        <div class="p-col-12 p-md-1 p-lg-6">
+          <a (click)="critica()">
+          <p-card header="Crítica" [style]="{'margin-bottom': '2em', 'background-color':'#65687B', 'color': 'white'}">
+            <p>Manifeste uma crítica com o atendimento ou serviço prestado da Instituição</p>
+          </p-card>
+          </a>
+          </div>
+    </div>
+      <div style="padding-bottom: 20px;">
+        <p-button label="Consulte sua Manifestação" (click)="consulta()" iconPos="right">
+        </p-button>
+        </div>
+    
+
+
+  </div>
+
+  <p-dialog header="Lei Geral de Proteção de Dados" [(visible)]="displayModalLgpd" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="p-field p-col-12">
+      <label>
+      Informamos que os dados pessoais aqui fornecidos receberão tratamento em conformidade com a legislação aplicável, atendendo, em especial, aos preceitos da Lei Geral de Proteção de Dados (Lei Federal 13.709/2018).
+    </label>
+    </div>
+    <div class="p-field p-col-12">
+      <label>
+        Os dados coletados serão utilizados para identificação do titular da manifestação, para manutenção do seu cadastro e atendimentos posteriores, e para facilitar o encaminhamento de futuras solicitações.
+      </label>
+      </div>
+    <p-panel header="Política de Privacidade do Grupo UBEC">
+      
+          <iframe
+          src="https://portalouvidoria.com.br:8501/assets/image/LGPD_UBEC.pdf#toolbar=0&navpanes=0&scrollbar=0"
+          frameBorder="0"
+          scrolling="auto"
+          height="100%"
+          width="100%"
+      ></iframe>
+  
+      </p-panel>
+    
+        <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="continuar()" label="Concordo" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" (click)="sair()" label="Discordo" styleClass="p-button-text"></p-button>
+        </ng-template>
+</p-dialog>
+
+
+

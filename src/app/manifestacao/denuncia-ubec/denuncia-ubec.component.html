@@ -1,0 +1,98 @@
+<ngx-ui-loader text="Inicializando..."></ngx-ui-loader>
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <img
+    width="220"
+    alt="GCON"
+    height="80"
+    src="assets/image/2_12_logo.png"
+  />
+  <span>Plataforma de Gestão e Conhecimento</span>
+    <div class="spacer"></div>
+    <img
+    width="220"
+    height="80"
+    [src]="imagemLogo"
+  />
+</div>
+<br><br>
+<div class="content" role="main">
+
+  <div [hidden]="backendForaAr">
+    <b><h3>O site está em manutenção, aguarde alguns minutos.</h3></b>
+</div>
+  <div [hidden]="backendNoAr">
+  <div class="linha">
+    <p-divider></p-divider>
+    <div><h3>Portal de Denúncia</h3></div>
+    <p-divider></p-divider>
+  </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-lg-6">
+          <a (click)="denuncia()">
+          <p-card header="Denúncias Diversas" [style]="{'margin-bottom': '2em', 'background-color':'Gold', 'color': 'white'}">
+            <p><font color="#000000"><b>Comunique uma irregularidade no âmbito organizacional da Instituição.</b></font>
+            </p>
+            <br>
+          </p-card>
+          </a>
+          </div>
+        <div class="p-col-12 p-lg-6">
+          <a (click)="denunciaSexual()">
+            <p-card header="Denúncia" [style]="{'margin-bottom': '2em', 'background-color':'DarkRed', 'color': 'white'}">
+                <p>Comunique um comportamento indesejado de <font color="#FFFF00"><b>caráter sexual</b></font> demonstrado de maneira verbal e não verbal, com ou sem contato físico.</p>
+          </p-card>
+          </a>
+        </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-col-12 p-lg-3">
+        </div>
+      <div class="p-col-12  p-lg-3">
+        <p-button label="Consulte sua Manifestação" (click)="consulta()">
+        </p-button>
+        </div> 
+        <div class="p-col-12 p-lg-3">
+          <p-button label="Voltar para o Inicio"  (click)="voltarInicio()">
+          </p-button>
+          </div> 
+          <div class="p-col-12  p-lg-3">
+          </div>
+  </div>
+
+  </div>
+
+  <p-dialog header="Lei Geral de Proteção de Dados" [(visible)]="displayModalLgpd" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <div class="p-field p-col-12">
+      <label>
+
+      </label>
+    </div>
+    <div class="p-field p-col-12">
+      <label>
+        Os dados coletados serão utilizados para identificação do titular da manifestação, para manutenção do seu cadastro e atendimentos posteriores, e para facilitar o encaminhamento de futuras solicitações.
+      </label>
+      </div>
+    <p-panel header="Política de Privacidade do Grupo UBEC">
+      
+          <iframe
+          src="https://portalouvidoria.com.br:8501/assets/image/LGPD_UBEC.pdf#toolbar=0&navpanes=0&scrollbar=0"
+          frameBorder="0"
+          scrolling="auto"
+          height="100%"
+          width="100%"
+      ></iframe>
+  
+      </p-panel>
+    
+        <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="continuar()" label="Concordo" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" (click)="sair()" label="Discordo" styleClass="p-button-text"></p-button>
+        </ng-template>
+</p-dialog>
+
+
+
